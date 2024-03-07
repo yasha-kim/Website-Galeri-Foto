@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow">
             <div class="container">
                 <a class="navbar-brand" href="{{ route('home') }}" style="font-weight: bolder;">
-                <i class="fa-solid fa-layer-group fa-2xl"></i>&nbsp;ViewPoint
+                <i class="fa-solid fa-layer-group fa-2xl" style="color:#F39F5A;"></i>&nbsp;ViewPoint
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -36,6 +36,14 @@
                     <ul class="navbar-nav m-2 w-100 justify-content-center">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}" style="font-weight: bolder;">{{ __('Home') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="get" action="{{ route('search') }}" style="display:flex;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Cari">
+                                </div>
+                                <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;margin-left:5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </form>                        
                         </li>
                 
                         <!-- <div class="form">
@@ -49,12 +57,12 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}" style="font-weight: bolder;">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}" style="font-weight: bolder;">{{ __('Masuk') }}</a>
                             </li>
                             <li class="nav-item">
                                 
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}" style="font-weight: bolder;">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}" style="font-weight: bolder;">{{ __('Daftar') }}</a>
                                 @endif
                             </li>
                         @else
@@ -72,7 +80,7 @@
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    {{ __('Keluar') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -91,74 +99,69 @@
         </main>
         
     </div>
-    <!-- jQuery -->
-    <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
-    <!-- Popper JS -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
-    <!-- Bootstrap JS -->
-    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
-    
+ 
+    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/jquery-3.3.1.slim.min.js')}}"></script>
+    <script src="{{asset('js/jquery-3.6.4.min.js')}}"></script>
+    <script src="{{asset('js/moment.min.js')}}"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const pinsRadio = document.getElementById('btnradio1');
-        const albumsRadio = document.getElementById('btnradio2');
-        const pinsContent = document.querySelector('.content1');
-        const albumsContent = document.getElementById('content2');
+        document.addEventListener('DOMContentLoaded', function () {
+            var postView = document.getElementById('postView');
+            var albumView = document.getElementById('albumView');
 
-        pinsRadio.addEventListener('change', function() {
-            if (pinsRadio.checked) {
-                pinsContent.style.display = 'block';
-                albumsContent.style.display = 'none';
-            }
-        });
-
-        albumsRadio.addEventListener('change', function() {
-            if (albumsRadio.checked) {
-                albumsContent.style.display = 'block';
-                pinsContent.style.display = 'none';
-            }
-        });
+            document.querySelectorAll('.btn-check').forEach(function (btn) {
+                btn.addEventListener('change', function () {
+                    if (btn.id === 'btnradio1') {
+                        postView.style.display = 'block';
+                        albumView.style.display = 'none';
+                    } else if (btn.id === 'btnradio2') {
+                        postView.style.display = 'none';
+                        albumView.style.display = 'block';
+                    }
+                });
+            });
         });
 
         $(document).ready(function() {
-        $('.image-upload').change(function() {
-            var count = $(this).get(0).files.length;
-            $('.image-preview').empty();
-            for (var i = 0; i < count; i++) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var html = '<div class="card mb-3">';
-                    html += '<img class="card-img-top" src="' + e.target.result + '" alt="Card image cap">';
-                    html += '</div>';
-                    $('.image-preview').append(html);
+            $('.image-upload').change(function() {
+                var count = $(this).get(0).files.length;
+                $('.image-preview').empty();
+                for (var i = 0; i < count; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var html = '<div class="card mb-3">';
+                        html += '<img class="card-img-top" src="' + e.target.result + '" alt="Card image cap">';
+                        html += '</div>';
+                        $('.image-preview').append(html);
+                    }
+                    reader.readAsDataURL($(this).get(0).files[i]);
                 }
-                reader.readAsDataURL($(this).get(0).files[i]);
-            }
-        });
+            });
 
-        $('.image-preview').on('click', '.card', function() {
-            var index = $('.image-preview .card').index(this);
-            $('.image-preview .card').removeClass('active');
-            $(this).addClass('active');
-            $('.image-title').val($('.image-title').eq(index).val());
-            $('.image-description').val($('.image-description').eq(index).val());
-            $('.form-select').val($('.form-select').eq(index).val());
-        });
+            $('.image-preview').on('click', '.card', function() {
+                var index = $('.image-preview .card').index(this);
+                $('.image-preview .card').removeClass('active');
+                $(this).addClass('active');
+                $('.image-title').val($('.image-title').eq(index).val());
+                $('.image-description').val($('.image-description').eq(index).val());
+                $('.form-select').val($('.form-select').eq(index).val());
+            });
 
-        $('.image-title').change(function() {
-            var index = $('.image-preview .card.active').index();
-            $('.image-title').eq(index).val($(this).val());
-        });
+            $('.image-title').change(function() {
+                var index = $('.image-preview .card.active').index();
+                $('.image-title').eq(index).val($(this).val());
+            });
 
-        $('.image-description').change(function() {
-            var index = $('.image-preview .card.active').index();
-            $('.image-description').eq(index).val($(this).val());
-        });
+            $('.image-description').change(function() {
+                var index = $('.image-preview .card.active').index();
+                $('.image-description').eq(index).val($(this).val());
+            });
 
-        $('.form-select').change(function() {
-            var index = $('.image-preview .card.active').index();
-            $('.form-select').eq(index).val($(this).val());
-        });
+            $('.form-select').change(function() {
+                var index = $('.image-preview .card.active').index();
+                $('.form-select').eq(index).val($(this).val());
+            });
         });
 
         // Inisialisasi boxscroll
@@ -184,18 +187,6 @@
             }
         });
 
-        document.getElementById('comment').addEventListener('input', function() {
-            var submitBtn = document.getElementById('submit');
-            submitBtn.style.display = this.value.trim() !== '' ? 'block' : 'none';
-        });
-
-        document.getElementById('comment').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                document.getElementById('commnetForm').submit();
-            }
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             const imgElements = document.querySelectorAll('.img-edit');
             imgElements.forEach(imgElement => {
@@ -209,7 +200,25 @@
             });
         });
 
-        
+        document.addEventListener('DOMContentLoaded', function () {
+            const commentDates = document.querySelectorAll('.comment-date');
+
+            commentDates.forEach(function (commentDate) {
+                const timestamp = commentDate.getAttribute('data-timestamp');
+                const relativeTime = commentDate.querySelector('.relative-time');
+
+                function updateRelativeTime() {
+                    relativeTime.textContent = moment.unix(timestamp).fromNow();
+                }
+
+                // Memperbarui waktu setiap 1 menit
+                setInterval(updateRelativeTime, 60000);
+
+                // Memanggil fungsi untuk pertama kali
+                updateRelativeTime();
+            });
+        });
+    
     </script>
 </body>
 

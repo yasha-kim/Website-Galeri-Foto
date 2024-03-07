@@ -30,9 +30,12 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $post = DB::table('posts')
+        $posts = DB::table('posts')
+        ->where('user_id','=',\Auth::user()->id)
+        ->get();  
+        $albums = DB::table('albums')
         ->where('user_id','=',\Auth::user()->id)
         ->get();      
-        return view('post.index')->with('posts',$post);
+        return view('post.index', compact('posts', 'albums'));
     }
 }

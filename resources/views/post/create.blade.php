@@ -6,6 +6,11 @@
         {{ $message }}
     </div>
 @endif
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>Error!</strong> Format foto tidak sesuai
+    </div>
+@endif
 <div class="container-fluid">
 
   <div class="row">
@@ -14,7 +19,6 @@
             <div class="image-preview"></div>
         </div>
     </div>
-    
     
     <div class="col-6">
         <div class="panel-body">
@@ -31,29 +35,27 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control image-title" name="judulfoto" placeholder="Title">
+                            <label class="form-label">Judul</label>
+                            <input type="text" class="form-control image-title" name="judulfoto" placeholder="Judul" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control image-description" name="deskripsifoto" placeholder="Description"></textarea>
+                            <label class="form-label">Deskripsi</label>
+                            <textarea class="form-control image-description" name="deskripsifoto" placeholder="Deskripsi" required></textarea>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Album</label>
-                            <select name="album_id" class="form-select">
+                            <select name="album_id" class="form-select" required>
                                 <option value="">--Pilih Album--</option>
-                                @foreach(App\Album::all() as $album)
-                                @if ($album->user_id == Auth::user()->id)
-
+                                @foreach(App\Album::where('user_id', Auth::user()->id)->get() as $album)
                                     <option value="{{ $album->id }}">{{ $album->nama_album }}</option>
-                                    @endif
                                 @endforeach
                             </select>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top:10px;justify-content:flex-start;">
-                    <button type="submit" class="btn rounded-pill" href="" style="font-size:18px;background-color: #F39F5A; color:white;">Create</button>
+                    <button type="submit" class="btn rounded-pill" href="" style="font-size:18px;background-color: #F39F5A; color:white;">Upload</button>
                 </div>
             </form>
 

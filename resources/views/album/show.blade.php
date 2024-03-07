@@ -33,31 +33,26 @@
         @foreach (App\Post::all() as $value)
             @if ($value->user_id == Auth::user()->id)
                 <div class="relative mb-1 before:content-[''] before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20">
-                
-                <img class="w-full rounded-4 img-edit" src="images/post/{{$value->path}}">
+                    <img class="w-full rounded-4 img-edit" src="images/post/{{$value->path}}">
                     <button class="btn btn-warning edit-button hidden rounded-pill shadow-md" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px;background-color: rgba(0, 0, 0, .075);">
-                      <i class="fa-solid fa-ellipsis"></i>
+                        <i class="fa-solid fa-ellipsis"></i>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $value->id }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></li>
-                      <li><a class="dropdown-item" href="{{ route('delete',['id' => $value->id])}}" onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')"><i class="fa-solid fa-trash"></i>&nbsp;Delete</a></li>
+                        <li><a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $value->id }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></li>
+                        <li><a class="dropdown-item" href="{{ route('delete',['id' => $value->id])}}" onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')"><i class="fa-solid fa-trash"></i>&nbsp;Delete</a></li>
                     </ul>
                     <div class="test__body absolute inset-0 p-3 text-white flex flex-col">
                         <div class="relative">
-                        <a class="test__link absolute inset-0" href="{{ route('pin.show', ['id' => $value->id]) }}"></a>
+                            <a class="test__link absolute inset-0" href="{{ route('pin.show', ['id' => $value->id]) }}"></a>
                             <h1 class="test__title text-md font-bold mb-2">{{$value->judulfoto}}</h1>
                         </div>
-                        
                     </div>
-
                 </div>
-                @else
-                <center><h1 class="text-center">You Have No Post</h1></center>
             @endif
         @endforeach
         @include('post.update')
-
     </div>
+
   
   <div>
     <a class="btn rounded-pill" href="{{ route('form') }}" role="button"  style="position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background-color: #F39F5A; color:black;font-weight:bolder;">

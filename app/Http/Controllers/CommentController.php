@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Comment;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -40,36 +40,16 @@ class CommentController extends Controller
     {
         $request->validate([
             'isikomentar' => 'required',
-            'post_id' => 'required|exists:posts,id',
         ]);
 
-        $comment = new Comment();
-        $comment->user_id = Auth::user()->id;
-        $comment->post_id =  $request->input('post_id');
-        $comment->isikomentar = $request->input('isikomentar');
-        $comment->tglkomentar = now();
-        $comment->save();
+        // Simpan komentar ke dalam database
+        $comments = Comment::create([
+            'isikomentar' => $request->isikomentar,
+            'post_id' => $request->post_id,
+            'user_id' => \Auth::user()->id,
+        ]);
 
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
-    }
-
-    public function replay(Request $request, $id)
-    {
-        $request->validate([
-            'replay' => 'required|string',
-        ]);
-
-        $parentComment = Comment::findOrFail($id);
-
-        $comment = new Comment();
-        $comment->user_id = Auth::user()->id;
-        $comment->post_id =  $parentComment->post_id;
-        $comment->isikomentar = $request->input('replay');
-        $comment->parent_id = $parentComment->id;
-        $comment->tglkomentar = now();
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Replay added successfully');
     }
 
     /**
@@ -77,7 +57,7 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::find($id);
         return view('post.show-pin', compact('post'));
     }
 

@@ -22,20 +22,32 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required',
             'fullname' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users,email,' . $user->id,
             'address' => 'required',
-          ]);
+        ]);
 
-          User::find($id)->update($validatedData);
+        $data = $request->only(['name', 'fullname', 'email', 'address']);
 
-          return redirect()->route('dashboard');
+        // Check if the password is provided and update it
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('dashboard')
+            ->with('success', 'User updated successfully');
     }
 
     /**

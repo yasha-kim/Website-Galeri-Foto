@@ -13,7 +13,6 @@ class Comment extends Model
         'user_id',
         'post_id',
         'isikomentar',
-        'tglkomentar',
     ];
 
     public function user()
@@ -23,6 +22,6 @@ class Comment extends Model
 
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'post_id');
     }
 }

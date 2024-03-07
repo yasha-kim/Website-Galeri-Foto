@@ -22,12 +22,23 @@ class IndexController extends Controller
 
     public function download($id)
     {
-        $post = DB::table('post')
-        ->where('id','=',$id)
-        ->first();
+        $post = Post::find($id);
 
-        $image = Image::make($post->content);
-        //dd($post->path);
-        return response()->download('images/post/',$post->path);
+        // Check if the post exists
+        if (!$post) {
+            return redirect()->back()->with('alert', 'Post not found');
+        }
+
+        // Get the image path from the post
+        $path = $post->path;
+
+        // Check if the file exists
+        if (Storage::exists('images/post/' . $path)) {
+            // Return the file as a downloadable response
+            return response()->download(storage_path('app/images/post/' . $path));
+        } else {
+            // Handle the case where the file does not exist
+            return redirect()->back()->with('alert', 'File not found');
+        }
     }
 }

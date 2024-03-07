@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
+
 use App\Album;
 use App\Post;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FormController extends Controller
 {
-    
     /**
      * Create a new controller instance.
      *
@@ -60,72 +60,96 @@ class FormController extends Controller
                 ]);
             }
         } else {
-            // Handle case where user is not authenticated
+
         }
     
-        return redirect()->back()->with('success', 'Post Added');
+        return redirect()->route('dashboard')->with('success', 'Post Added');
     }
 
-    public function update_form($id)
+    public function search(Request $request)
     {
-        $post_id = $id;
-        $update = DB::table('posts')
-        ->where('posts.id','=',$id)
-        ->first();
-        return view('post.update')->with('update',$update)->with('id',$id);
+        $keyword = $request->input('keyword');
+
+        // Perform a search based on the keyword
+        $post = Post::where('judulfoto', 'like', '%' . $keyword . '%')
+                     ->orWhere('deskripsifoto', 'like', '%' . $keyword . '%')
+                     ->get();
+
+        return view('post.search-results', compact('post', 'keyword'));
     }
 
-    public function update(Request $request)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Post $post)
     {
-        $this->validate($request, [
+        $request->validate([
             'judulfoto' => 'required',
             'deskripsifoto' => 'required',
         ]);
 
-        if (Auth::check()) {
-            // Periksa apakah ada file yang diunggah
-            if ($request->hasFile('path')) {
-                foreach ($request->file('path') as $image) {
-                    $slug = str_slug($request->name);
-                    $currentDate = Carbon::now()->toDateString();
-                    $imagename = $slug . '-' . $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-                    if (!file_exists('images/post')) {
-                        mkdir('images/post', 0777, true);
-                    }
-                    $image->move('images/post', $imagename);
+        $post->update([
+            'judulfoto' => $request->judulfoto,
+            'deskripsifoto' => $request->deskripsifoto,
+        ]);
 
-                    DB::table('posts')
-                        ->where('id', $request->post_id)
-                        ->update([
-                            'judulfoto' => $request->judulfoto,
-                            'deskripsifoto' => $request->deskripsifoto,
-                            'user_id' => Auth::user()->id,
-                        ]);
-                }
-            } else {
-                // Lakukan sesuatu jika tidak ada file yang diunggah
-            }
-
-            return redirect()->back()->with('success', 'Post Updated');
-        } else {
-            $imagename = "default.png";
-        }
+        return redirect()->back()
+            ->with('success', 'Post updated successfully');
     }
 
 
     /**
      * Display the specified resource.
      */
+    public function show_post($id)
+    {
+        $post = Post::find($id);
+        $comments = DB::table('comments')->where('post_id', $id)->get();
+
+        foreach ($post->comments as $comment) {
+            $comment->created_at = $comment->created_at ?? Carbon::now();
+        }
+        
+        return view('post.show-pin', compact('post', 'comments'));
+    }
+
     public function show($id)
     {
-        $post = DB::table('posts')->where('id', $id)->first();
-        $comments = DB::table('comments')->where('post_id', $id)->get();
-        return view('post.show-pin', compact('post', 'comments'));
+        $post = Post::with('comments')->find($id);
+
+        // Check if the post exists
+        if ($post) {
+            // Retrieve comments using Eloquent relationship
+            $comments = $post->comments;
+    
+            // Loop through comments and set created_at if null
+            foreach ($comments as $comment) {
+                $comment->created_at = $comment->created_at ?? Carbon::now();
+            }
+    
+            return view('post.show-user', compact('post', 'comments'));
+        }
     }
 
     public function delete($id)
     {
-        DB::table('posts')->where('id', '=', $id)->delete();
-        return redirect()->back()->with('alert', 'Post Deleted');
+        $post = Post::with('comments')->find($id);
+
+        // Check if the post exists
+        if ($post) {
+            // Loop through comments and set created_at if null
+            foreach ($post->comments as $comment) {
+                $comment->created_at = $comment->created_at ?? Carbon::now();
+            }
+
+            // Delete the post and its comments
+            $post->delete();
+
+            return redirect()->route('dashboard')->with('alert', 'Post Deleted');
+        }
     }
 }

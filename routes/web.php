@@ -1,9 +1,7 @@
 <?php
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AlbumController;
-use App\Http\Controllers\FormController;
-use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,18 +25,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+//Route Post | Like | Komentar
 Route::get('/form', 'FormController@index')->name('form');
-Route::get('/like/{id}', 'LikeController@like')->name('like');
 Route::post('/store', 'FormController@store')->name('store');
-// User Functionalities
-Route::get('/form/update/{id}', 'FormController@update_form')->name('update-form');
+Route::get('/post/{id}', 'FormController@show_post')->name('pin.show');
+Route::get('/post/{id}/user','FormController@show')->name('pin-user.show');
+Route::put('/update/{id}', 'FormController@update')->name('update');
 Route::get('/delete/{id}', 'FormController@delete')->name('delete');
-Route::post('/update', 'FormController@update')->name('update');
+Route::get('/post/search', 'FormController@search')->name('search');
+Route::get('/like/{id}', 'LikeController@like')->name('like');
+Route::post('/post/{post_id}/comment', [CommentController::class, 'store'])->name('comment.store');
 
-Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
-Route::get('/{albumSlug}', [AlbumController::class, 'show'])->name('album.show');
+//Route Album
+Route::post('/album', 'AlbumController@store')->name('album.store');
+Route::get('/{albumSlug}', 'AlbumController@show')->name('album.show');
 
-Route::get('/pin/{id}', [FormController::class, 'show'])->name('pin.show');
 
-// Route::post('/pin/{post_id}/comment', [CommentController::class, 'store'])->name('comment.store');
-Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');

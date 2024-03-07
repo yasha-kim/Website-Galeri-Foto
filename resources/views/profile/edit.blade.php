@@ -14,19 +14,19 @@
 
                     <div class="col-12 pb-3 ">
                         <div class="form-group text-start">
-                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-7">Name</label>
+                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-7">Nama</label>
                         <input type="text" name="name" class="form-control" value="{{ old ( 'name', Auth::user()->name ) }}"/>
                         </div>
                     </div>
                     <div class="col-12 pb-3 ">
                         <div class="form-group text-start">
-                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-7">Fullname</label>
+                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-7">Nama Lengkap</label>
                         <input type="text" name="fullname" class="form-control" value="{{ old ( 'fullname', Auth::user()->fullname ) }}"/>
                         </div>
                     </div>
                     <div class="col-12 pb-3">
                         <div class="form-group text-start">
-                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-8">Address</label>
+                        <label class="mb-1 fw-medium text-light-dark" for="modalInput2-8">Alamat</label>
                         <input type="text" name="address" class="form-control" value="{{ old ( 'address', Auth::user()->address ) }}"/>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;">Save</button>
+                        <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;">Simpan</button>
                     </div>
                     
                 </form>

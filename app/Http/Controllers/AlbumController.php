@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
+use App\Album;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Illuminate\View\View;
-use App\Album;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class AlbumController extends Controller
 {
@@ -54,6 +54,9 @@ class AlbumController extends Controller
         // Generate a unique slug for the album name
         $albumSlug = Str::slug($album->nama_album);
 
+        $album->nama_album = $albumSlug;
+        $album->save();
+
         // Redirect to the show route with the generated slug
         return redirect()->route('album.show', ['albumSlug' => $albumSlug]);
 
@@ -61,12 +64,8 @@ class AlbumController extends Controller
 
     public function show($albumSlug)
     {
-        // Retrieve the album using the slug
-        $album = Album::where('nama_album', Str::slug($albumSlug))->first();
+        $album = Album::where('nama_album', $albumSlug)->first();
 
-        // Add additional logic as needed
-
-        // Pass the album data to the view
         return view('album.show', ['album' => $album]);
     }
 
