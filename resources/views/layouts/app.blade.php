@@ -106,20 +106,24 @@
     <script src="{{asset('js/moment.min.js')}}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var postView = document.getElementById('postView');
-            var albumView = document.getElementById('albumView');
+        document.addEventListener('DOMContentLoaded', function() {
+            const pinsRadio = document.getElementById('btnradio1');
+            const albumsRadio = document.getElementById('btnradio2');
+            const pinsContent = document.querySelector('.content1');
+            const albumsContent = document.getElementById('content2');
 
-            document.querySelectorAll('.btn-check').forEach(function (btn) {
-                btn.addEventListener('change', function () {
-                    if (btn.id === 'btnradio1') {
-                        postView.style.display = 'block';
-                        albumView.style.display = 'none';
-                    } else if (btn.id === 'btnradio2') {
-                        postView.style.display = 'none';
-                        albumView.style.display = 'block';
-                    }
-                });
+            pinsRadio.addEventListener('change', function() {
+                if (pinsRadio.checked) {
+                    pinsContent.style.display = 'block';
+                    albumsContent.style.display = 'none';
+                }
+            });
+
+            albumsRadio.addEventListener('change', function() {
+                if (albumsRadio.checked) {
+                    albumsContent.style.display = 'block';
+                    pinsContent.style.display = 'none';
+                }
             });
         });
 

@@ -27,12 +27,12 @@
         <label class="btn btn-outline-warning" for="btnradio1">Post&nbsp;<span class="badge rounded-pill text-bg-warning">{{ $posts->count() }}</span></label>
 
         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-        <label class="btn btn-outline-warning" for="btnradio2">Album</label>
+        <label class="btn btn-outline-warning" for="btnradio2">Album&nbsp;<span class="badge rounded-pill text-bg-warning">{{ $albums->count() }}</span></label>
 
     </div>
 </div>
 
-<div id="postView">
+<div class="content1">
     <div class="card-header text-center border-0 pt-4 pt-lg-3 pb-4 pb-lg-3 px-4">
         <div class="d-flex justify-content-end">
 
@@ -74,11 +74,15 @@
                                         <textarea class="form-control" name="deskripsi" placeholder="Deskripsi"></textarea>
                                     </div>
                                 </div>
+                                </div>
+
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;">Tambah</button>
-                                </div>   
+                                </div>
+                                
                             </form>
                         </div>
+                    
                     </div>
                 </div>
             </div>
@@ -87,11 +91,8 @@
     </div>
 
     <div class="columns-1 gap-2 space-y-4 p-4 sm:columns-2 md:columns-3 lg:columns-4">
-        @php
-            $posts = App\Post::where('user_id', Auth::user()->id)->orderByDesc('tglunggah')->get();
-        @endphp
-
-        @foreach ($posts as $value)  
+        @foreach ($posts->sortByDesc('tglunggah') as $value) 
+            @if ($value->user_id == Auth::user()->id)
             <div class="relative mb-1 before:content-[''] before:rounded-md before:absolute before:inset-0 before:bg-black before:bg-opacity-20 ">
             
             <img class="w-full rounded-4 img-edit" src="images/post/{{$value->path}}">
@@ -103,12 +104,16 @@
                     </div>    
                 </div>
             </div>
+                @else
+                <center><h1 class="text-center">You Have No Post</h1></center>
+            @endif
         @endforeach
+        @include('post.update')
 
     </div>
 </div>
 
-<div id="albumView" style="display: none;">
+<div id="content2" style="display:none;">
     <div class="row " style="padding:1.5rem;margin-top:1rem;border-radius:1.5rem;">
         @php
             $albums = App\Album::where('user_id', Auth::user()->id)->orderBy('nama_album')->get();
@@ -125,7 +130,7 @@
             </div>
         @endforeach
     </div>
-
 </div>
+
 
 @endsection
