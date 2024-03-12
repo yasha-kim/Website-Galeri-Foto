@@ -168,18 +168,6 @@
             });
         });
 
-        // Inisialisasi boxscroll
-        const boxscroll = document.querySelector('.boxscroll');
-        const content = document.querySelector('.content');
-
-        // Atur tinggi konten boxscroll agar sesuai dengan isi konten
-        content.style.height = content.offsetHeight + 'px';
-
-        // Tambahkan event listener untuk mengatur tinggi konten boxscroll saat ukuran window berubah
-        window.addEventListener('resize', function() {
-        content.style.height = content.offsetHeight + 'px';
-        });
-
         const commentInput = document.getElementById('comment');
         const submitButton = document.getElementById('submit');
 
@@ -189,19 +177,6 @@
             } else {
             submitButton.style.display = 'none';
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const imgElements = document.querySelectorAll('.img-edit');
-            imgElements.forEach(imgElement => {
-            const editButton = imgElement.nextElementSibling;
-            imgElement.addEventListener('mouseenter', () => {
-            editButton.classList.remove('hidden');
-            });
-            imgElement.addEventListener('mouseleave', () => {
-            editButton.classList.add('hidden');
-            });
-            });
         });
 
         document.addEventListener('DOMContentLoaded', function () {

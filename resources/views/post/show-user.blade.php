@@ -23,11 +23,11 @@
                   <div class="d-flex justify-content-end">
                   <button class="btn btn-warning edit-button hidden rounded-pill shadow-md" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px;">
                     <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <ul class="dropdown-menu shadow-lg">
-                    <li><a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $post->id }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></li>
-                    <li><a class="dropdown-item" href="{{ route('delete',['id' => $post->id])}}" onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')"><i class="fa-solid fa-trash"></i>&nbsp;Hapus</a></li>
-                </ul>
+                  </button>
+                  <ul class="dropdown-menu shadow-lg">
+                      <li><a class="dropdown-item" role="button" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $post->id }}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit</a></li>
+                      <li><a class="dropdown-item" href="{{ route('delete',['id' => $post->id])}}" onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')"><i class="fa-solid fa-trash"></i>&nbsp;Hapus</a></li>
+                  </ul>
     
                   </div>
                 </div>

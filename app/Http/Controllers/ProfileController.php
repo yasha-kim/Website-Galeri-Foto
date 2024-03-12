@@ -11,14 +11,30 @@ use Illuminate\View\View;
 use App\User;
 
 class ProfileController extends Controller
-{
+{ 
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        $users = User::all();
+        return view('users', compact('users'));
+    }
+
     /**
      * Display the user's profile form.
      */
     public function edit(string $id)
     {
-        $users = User::find($id);
-        return view('users.edit', compact('users'));
+        $users = User::findOrFail($id);
+        return view('profile.edit', compact('users'));
     }
 
     /**
@@ -28,12 +44,12 @@ class ProfileController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required',
             'fullname' => 'required',
-            'email' => 'required|unique:users,email,' . $user->id,
+            'email' => 'required|unique:users,email,' . Auth::user()->id,
             'address' => 'required',
         ]);
 
@@ -44,9 +60,9 @@ class ProfileController extends Controller
             $data['password'] = bcrypt($request->password);
         }
 
-        $user->update($data);
+        Auth::user()->update($data);
 
-        return redirect()->route('dashboard')
+        return redirect()->back()
             ->with('success', 'User updated successfully');
     }
 

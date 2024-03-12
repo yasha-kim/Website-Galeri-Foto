@@ -1,4 +1,4 @@
-<div class="modal fade" id="userEdit{{ Auth::user()->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="userEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header ">
@@ -6,11 +6,11 @@
                 
             </div>
             <div class="modal-body">
-                <form class="p-10 mw-5xl mx-auto bg-light-light " method="post" action="{{route('profile.update', Auth::user()->id)}}">
+                <form class="p-10 mw-5xl mx-auto bg-light-light" method="post" action="{{route('profile.update', ['id' => Auth::user()->id])}}">
                     <div class="row g-8">
                     {{csrf_field()}}
 
-                    @method('patch')
+                    @method('POST')
 
                     <div class="col-12 pb-3 ">
                         <div class="form-group text-start">
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;">Simpan</button>
+                        <button type="submit" class="btn btn-warning rounded-pill" style="font-size:18px;">Update</button>
                     </div>
                     
                 </form>

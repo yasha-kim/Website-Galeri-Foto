@@ -76,7 +76,16 @@ class FormController extends Controller
                      ->orWhere('deskripsifoto', 'like', '%' . $keyword . '%')
                      ->get();
 
-        return view('post.search-results', compact('post', 'keyword'));
+        return view('post.search', compact('post', 'keyword'));
+    }
+
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(string $id)
+    {
+        $post = Post::findOrFail($id);
+        return view('post.update', compact('post'));
     }
 
     /**
@@ -111,11 +120,17 @@ class FormController extends Controller
         $post = Post::find($id);
         $comments = DB::table('comments')->where('post_id', $id)->get();
 
-        foreach ($post->comments as $comment) {
-            $comment->created_at = $comment->created_at ?? Carbon::now();
+        if ($post) {
+            // Retrieve comments using Eloquent relationship
+            $comments = $post->comments;
+    
+            // Loop through comments and set created_at if null
+            foreach ($comments as $comment) {
+                $comment->created_at = $comment->created_at ?? Carbon::now();
+            }
+    
+            return view('post.show-pin', compact('post', 'comments'));
         }
-        
-        return view('post.show-pin', compact('post', 'comments'));
     }
 
     public function show($id)

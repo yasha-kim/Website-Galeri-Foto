@@ -1,16 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if($message = Session::get('success'))
-    <div class="alert alert-success">
-        {{ $message }}
-    </div>
-@endif
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Error!</strong> Format foto tidak sesuai
-    </div>
-@endif
+
 <div class="container-fluid">
 
   <div class="row">

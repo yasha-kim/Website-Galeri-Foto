@@ -23,7 +23,7 @@ Route::get('/download/{id}', 'IndexController@download')->name('download');
 // Authenticated User Functionalities
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
-Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::PUT('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
 //Route Post | Like | Komentar
 Route::get('/form', 'FormController@index')->name('form');
@@ -39,5 +39,5 @@ Route::post('/post/{post_id}/comment', [CommentController::class, 'store'])->nam
 //Route Album
 Route::post('/album', 'AlbumController@store')->name('album.store');
 Route::get('/{albumSlug}', 'AlbumController@show')->name('album.show');
-
-
+Route::PUT('/album/{id}', 'AlbumController@update')->name('album.update');
+Route::delete('/album/{id}', 'AlbumController@destroy')->name('album.destroy');
